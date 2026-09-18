@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KelasKu - Website Kelas</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;padding:28px 18px}
+.container{max-width:1100px;margin:auto}header h1{margin:0 0 7px;font-size:30px}
+nav{background:#fff;box-shadow:0 2px 12px #0001;position:sticky;top:0;z-index:10}
+.nav{display:flex;gap:8px;padding:10px;overflow:auto}.nav button{border:0;background:#eef2ff;color:#4338ca;padding:11px 15px;border-radius:10px;font-weight:bold;cursor:pointer;white-space:nowrap}
+.nav button.active,.nav button:hover{background:#4f46e5;color:white}
+main{padding:24px 15px}section{display:none}section.active{display:block}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 4px 18px #0000000d}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}
+.member{display:flex;align-items:center;gap:13px;background:#fff;border-radius:15px;padding:15px;box-shadow:0 4px 18px #0000000d}
+.avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#e0e7ff;color:#4338ca;display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:bold;flex:none}
+.member-info{flex:1}.member-info b{font-size:17px}.member-info small{color:#64748b}
+input,textarea{width:100%;padding:12px;margin:7px 0 13px;border:1px solid #dbe1ea;border-radius:10px;font-size:15px}
+textarea{min-height:90px;resize:vertical}.btn{border:0;background:#4f46e5;color:#fff;padding:11px 15px;border-radius:10px;cursor:pointer;font-weight:bold}
+.btn.gray{background:#e2e8f0;color:#172033}.btn.red,.remove{background:#fee2e2;color:#b91c1c}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.btn.small{padding:8px 10px;font-size:13px}
+.media-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}.media-item{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px #0000000d}
+.media-item img,.media-item video{width:100%;height:175px;object-fit:cover;background:#111}.media-info{padding:13px}
+.badge{display:inline-block;background:#ede9fe;color:#6d28d9;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.empty{text-align:center;color:#64748b;padding:25px}footer{text-align:center;color:#64748b;padding:25px}
+label{font-weight:bold;font-size:14px}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:30;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}.modal-box{background:white;width:min(500px,100%);border-radius:17px;padding:20px;max-height:90vh;overflow:auto}
+.close{float:right;border:0;background:#eee;border-radius:8px;padding:7px 10px;cursor:pointer}
+.preview{width:90px;height:90px;border-radius:50%;object-fit:cover;margin:5px 0 12px;display:none}
+</style>
+</head>
+<body>
+
+<header><div class="container">
+<h1>🏫 KelasKu</h1><p>Kelola guru, murid, foto, video, dan informasi kelas.</p>
+</div></header>
+
+<nav><div class="container nav">
+<button class="active" onclick="showPage('beranda',this)">🏠 Beranda</button>
+<button onclick="showPage('guru',this)">👨‍🏫 Guru</button>
+<button onclick="showPage('murid',this)">👨‍🎓 Murid</button>
+<button onclick="showPage('media',this)">📸 Foto & Video</button>
+</div></nav>
+
+<main class="container">
+<section id="beranda" class="active">
+<div class="card"><h2>Selamat Datang 👋</h2><p>Website kelas sederhana dengan fitur edit data.</p></div>
+<div class="grid">
+<div class="card"><h3>👨‍🏫 Guru</h3><p id="guruCount">0 guru</p></div>
+<div class="card"><h3>👨‍🎓 Murid</h3><p id="muridCount">0 murid</p></div>
+<div class="card"><h3>📸 Media</h3><p id="mediaCount">0 file</p></div>
+</div>
+</section>
+
+<section id="guru">
+<div class="card"><h2>👨‍🏫 Tambah Guru</h2><label>Nama Guru</label>
+<input id="guruNama" placeholder="Contoh: Bapak Andi">
+<label>Foto Guru</label><input id="guruFoto" type="file" accept="image/*">
+<button class="btn" onclick="addGuru()">+ Tambah Guru</button></div>
+<div id="guruList" class="grid"></div>
+</section>
+
+<section id="murid">
+<div class="card"><h2>👨‍🎓 Tambah Murid</h2><label>Nama Murid</label>
+<input id="muridNama" placeholder="Contoh: Edgar">
+<label>Foto Murid</label><input id="muridFoto" type="file" accept="image/*">
+<button class="btn" onclick="addMurid()">+ Tambah Murid</button></div>
+<div id="muridList" class="grid"></div>
+</section>
+
+<section id="media">
+<div class="card"><h2>📸 Tambahkan Foto atau Video</h2>
+<label>Judul</label><input id="mediaJudul" placeholder="Contoh: Kegiatan kelas">
+<label>Pilih file</label><input id="mediaFile" type="file" accept="image/*,video/*">
+<button class="btn" onclick="addMedia()">+ Masukkan Media</button>
+</div><div id="mediaList" class="media-list"></div>
+</section>
+</main>
+
+<footer>© 2026 KelasKu • Website Kelas</footer>
+
+<div id="editModal" class="modal">
+<div class="modal-box">
+<button class="close" onclick="closeModal()">✕</button>
+<h2 id="modalTitle">Edit Data</h2>
+<label>Nama</label><input id="editNama">
+<label>Ganti foto (opsional)</label><input id="editFoto" type="file" accept="image/*">
+<img id="editPreview" class="preview">
+<button class="btn" onclick="saveEdit()">💾 Simpan Perubahan</button>
+</div>
+</div>
+
+<script>
+let guru=JSON.parse(localStorage.getItem('kelas_guru')||'[]');
+let murid=JSON.parse(localStorage.getItem('kelas_murid')||'[]');
+let media=JSON.parse(localStorage.getItem('kelas_media')||'[]');
+let editType='',editIndex=-1;
+
+function showPage(id,btn){
+ document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+}
+
+function readFile(input,callback){
+ const file=input.files[0]; if(!file){callback('');return}
+ const reader=new FileReader();reader.onload=()=>callback(reader.result);reader.readAsDataURL(file);
+}
+
+function addGuru(){
+ const nama=guruNama.value.trim();if(!nama)return alert('Masukkan nama guru.');
+ readFile(guruFoto,f=>{guru.push({nama,foto:f});save();guruNama.value='';guruFoto.value='';render()});
+}
+function addMurid(){
+ const nama=muridNama.value.trim();if(!nama)return alert('Masukkan nama murid.');
+ readFile(muridFoto,f=>{murid.push({nama,foto:f});save();muridNama.value='';muridFoto.value='';render()});
+}
+function addMedia(){
+ const file=mediaFile.files[0];if(!file)return alert('Pilih foto atau video.');
+ const reader=new FileReader();reader.onload=()=>{
+ media.push({judul:mediaJudul.value.trim()||'Media Kelas',nama:file.name,type:file.type,data:reader.result});
+ save();mediaJudul.value='';mediaFile.value='';render()};reader.readAsDataURL(file);
+}
+
+function openEdit(type,index){
+ editType=type;editIndex=index;
+ const item=(type==='guru'?guru:murid)[index];
+ modalTitle.textContent='Edit '+(type==='guru'?'Guru':'Murid');
+ editNama.value=item.nama;editFoto.value='';editPreview.style.display=item.foto?'block':'none';editPreview.src=item.foto||'';
+ editModal.classList.add('show');
+}
+function saveEdit(){
+ const arr=editType==='guru'?guru:murid;
+ const nama=editNama.value.trim();if(!nama)return alert('Nama tidak boleh kosong.');
+ const item=arr[editIndex];item.nama=nama;
+ readFile(editFoto,f=>{if(f)item.foto=f;save();closeModal();render()});
+}
+function closeModal(){editModal.classList.remove('show')}
+
+function removeItem(type,index){
+ if(!confirm('Yakin ingin menghapus data ini?'))return;
+ if(type==='guru')guru.splice(index,1);
+ else if(type==='murid')murid.splice(index,1);
+ else media.splice(index,1);
+ save();render();
+}
+
+function save(){
+ localStorage.setItem('kelas_guru',JSON.stringify(guru));
+ localStorage.setItem('kelas_murid',JSON.stringify(murid));
+ localStorage.setItem('kelas_media',JSON.stringify(media));
+}
+
+function safe(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function render(){
+ guruCount.textContent=guru.length+' guru';muridCount.textContent=murid.length+' murid';mediaCount.textContent=media.length+' file';
+
+ guruList.innerHTML=guru.length?guru.map((x,i)=>memberHTML(x,i,'guru')).join(''):'<div class="card empty">Belum ada guru.</div>';
+ muridList.innerHTML=murid.length?murid.map((x,i)=>memberHTML(x,i,'murid')).join(''):'<div class="card empty">Belum ada murid.</div>';
+
+ mediaList.innerHTML=media.length?media.map((x,i)=>`
+ <div class="media-item">${x.type.startsWith('video/')?`<video controls src="${x.data}"></video>`:`<img src="${x.data}" alt="">`}
+ <div class="media-info"><span class="badge">${x.type.startsWith('video/')?'VIDEO':'FOTO'}</span>
+ <h3>${safe(x.judul)}</h3><small>${safe(x.nama)}</small>
+ <div class="actions"><button class="btn small red" onclick="removeItem('media',${i})">🗑 Hapus</button></div></div></div>`).join(''):'<div class="card empty">Belum ada foto atau video.</div>';
+}
+function memberHTML(x,i,type){
+ return `<div class="member">${x.foto?`<img class="avatar" src="${x.foto}">`:`<div class="avatar">${safe(x.nama.charAt(0).toUpperCase())}</div>`}
+ <div class="member-info"><b>${safe(x.nama)}</b><br><small>${type==='guru'?'Guru':'Murid'}</small>
+ <div class="actions"><button class="btn small" onclick="openEdit('${type}',${i})">✏️ Edit</button>
+ <button class="btn small red" onclick="removeItem('${type}',${i})">🗑 Hapus</button></div></div></div>`;
+}
+render();
+</script>
+</body>
+</html>

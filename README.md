@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KelasKu - Website Kelas</title>
+<title>Kelas7bSSA - Website Kelas7B</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
 header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;padding:28px 18px}
